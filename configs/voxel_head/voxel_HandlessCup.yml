@@ -1,0 +1,19 @@
+base_yml: configs/voxel_head/voxel_base.yml
+data:
+  training:
+    class_name: HandlessCup
+    voxel_trans_noise_max: 4
+    voxel_size_noise_max: [2, 2, 2]
+  validation:
+    class_name: HandlessCup
+    voxel_trans_noise_max: 4
+    voxel_size_noise_max: [2, 2, 2]
+model:
+  param_head:
+    in_chan: 624
+    out_chan: 4 # dim of params
+  pos_head:
+    in_chan: 624
+  ori_head:
+    in_chan: 624
+  cls_name: HandlessCup

@@ -1,0 +1,148 @@
+wandb_project_name: Voxel_smooth
+data:
+  training:
+    dataset: voxel
+    roots: [datasets/table_voxel/full_type_table_1_voxelized, datasets/table_voxel/full_type_table_2_voxelized, datasets/table_voxel/full_type_table_3_voxelized, datasets/table_voxel/full_type_table_4_voxelized]
+    split: training
+    max_data_num: 999999
+    batch_size: 32
+    shuffle: True
+    num_workers: 0
+    preload : False
+  validation:
+    dataset: voxel
+    roots: [datasets/table_voxel/full_type_table_1_voxelized, datasets/table_voxel/full_type_table_2_voxelized, datasets/table_voxel/full_type_table_3_voxelized, datasets/table_voxel/full_type_table_4_voxelized]
+    split: validation
+    max_data_num: 999999
+    batch_size: 32
+    shuffle: True
+    num_workers: 0
+    preload : False
+model:
+  arch: voxel_head
+  backbone:
+    arch: resnet3d
+    model_depth: 10
+    n_input_channels: 2
+    no_max_pool: True
+  common_feature_layer:
+    arch: fc_vec
+    in_chan: 512
+    out_chan: 512
+    l_hidden: [512]
+    activation: [leakyrelu]
+    out_activation: leakyrelu
+  pos_head:
+    arch: fc_vec
+    out_chan: 3 # dim of position
+    l_hidden: [256, 256, 256]
+    activation: [leakyrelu, leakyrelu, leakyrelu]
+    out_activation: sigmoid
+  ori_head:
+    arch: fc_vec
+    in_chan: 512
+    out_chan: 2 # dim of ori
+    l_hidden: [256, 256]
+    activation: [leakyrelu, leakyrelu]
+    out_activation: linear
+  param_head:
+    arch: fc_vec
+    in_chan: 512
+    l_hidden: [256, 256]
+    activation: [leakyrelu, leakyrelu]
+    out_activation: linear
+  pos_from_global: False
+  ori_from_global: False
+  param_from_global: False
+  loss_config:
+    position:
+      weight: 0.0
+    orientation:
+      weight: 0.0
+    param:
+      weight: 0.0
+      use_only_nonsymmetric: False
+    chamfer:
+      weight: 1.0
+trainer:
+  type: base
+  n_epoch: 200
+  optimizer:
+    name: adam
+    lr: 0.00005
+  detect_nan: False
+  scheduler:
+    type: cosineannealinglr
+    T_max: 200
+logger:
+  training:
+    type: voxellogger
+    prefix: train
+    items:
+      loss:
+        type: scalar
+        interval: 1
+      pos_loss:
+        type: scalar
+        interval: 1
+      ori_loss:
+        type: scalar
+        interval: 1
+      param_loss:
+        type: scalar
+        interval: 1
+      chamfer_loss:
+        type: scalar
+        interval: 1
+      voxel:
+        type: voxel
+        voxel_size: 0.002
+        downsample: 1024
+        interval: 5000
+      gt_pc:
+        type: param_to_pc
+        interval: 999999999
+        color: [255, 255, 255]
+      pred_pc:
+        type: param_to_pc_with_gt
+        interval: 5000
+        color: [255, 0, 0]
+        with_pc: gt_pc
+  validation:
+    type: voxellogger
+    prefix: valid
+    best_model_metric: chamfer_metric
+    items:
+      loss:
+        type: average_meter
+        interval: 1
+      pos_loss:
+        type: average_meter
+        interval: 1
+      ori_loss:
+        type: average_meter
+        interval: 1
+      param_loss:
+        type: average_meter
+        interval: 1
+      chamfer_loss:
+        type: average_meter
+        interval: 1
+      chamfer_metric:
+        type: average_meter
+        interval: 1
+        criterion: ↓
+      voxel:
+        type: voxel
+        voxel_size: 0.002
+        downsample: 1024
+        interval: 99999999
+      gt_pc:
+        type: param_to_pc
+        interval: 99999999
+        color: [255, 255, 255]
+      pred_pc:
+        type: param_to_pc_with_gt
+        interval: 99999999
+        color: [255, 0, 0]
+        with_pc: gt_pc

@@ -1,0 +1,19 @@
+base_yml: configs/voxel_head/voxel_base.yml
+data:
+  training:
+    class_name: Bowl
+    voxel_trans_noise_max: 10
+    voxel_size_noise_max: [5, 5, 3]
+  validation:
+    class_name: Bowl
+    voxel_trans_noise_max: 10
+    voxel_size_noise_max: [5, 5, 3]
+model:
+  param_head:
+    in_chan: 610
+    out_chan: 6 # dim of params
+  pos_head:
+    in_chan: 610
+  ori_head:
+    in_chan: 610
+  cls_name: Bowl

@@ -1,0 +1,19 @@
+base_yml: configs/voxel_head/voxel_base.yml
+data:
+  training:
+    class_name: BeerBottle
+    voxel_trans_noise_max: 4
+    voxel_size_noise_max: [2, 2, 2]
+  validation:
+    class_name: BeerBottle
+    voxel_trans_noise_max: 4
+    voxel_size_noise_max: [2, 2, 2]
+model:
+  param_head:
+    in_chan: 575
+    out_chan: 6 # dim of params
+  pos_head:
+    in_chan: 575
+  ori_head:
+    in_chan: 575
+  cls_name: BeerBottle

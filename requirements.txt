@@ -1,0 +1,11 @@
+numpy==1.26.3
+pybullet==3.2.3
+tqdm
+omegaconf
+open3d
+opencv-python
+numba
+scikit-image
+wandb
+coacd
+trimesh

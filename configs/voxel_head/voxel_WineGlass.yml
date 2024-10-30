@@ -1,0 +1,19 @@
+base_yml: configs/voxel_head/voxel_base.yml
+data:
+  training:
+    class_name: WineGlass
+    voxel_trans_noise_max: 10
+    voxel_size_noise_max: [5, 5, 3]
+  validation:
+    class_name: WineGlass
+    voxel_trans_noise_max: 10
+    voxel_size_noise_max: [5, 5, 3]
+model:
+  param_head:
+    in_chan: 806
+    out_chan: 8 # dim of params
+  pos_head:
+    in_chan: 806
+  ori_head:
+    in_chan: 806
+  cls_name: WineGlass

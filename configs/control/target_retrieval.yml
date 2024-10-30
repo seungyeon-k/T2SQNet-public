@@ -1,0 +1,71 @@
+# experiment type
+exp_type: sim                     # sim, real
+recog_type: t2sqnet_rgb           # t2sqnet_gt, t2sqnet_rgb
+sim_type: table                   # table, shelf
+task_type: target_retrieval       # clear_clutter, target_retrieval
+
+# task setting
+target_object: WineGlass          # 'WineGlass', 'Bowl', 'Bottle', 'BeerBottle', 'HandlessCup', 'Mug', 'Dish'
+action_types: ['pick_and_place']  # pick_and_place
+place_offset: 0.01
+
+# simulation setting
+enable_gui: True
+data_type: tableware
+object_types: ['BeerBottle'] # 'WineGlass', 'Bowl', 'Bottle', 'BeerBottle', 'HandlessCup', 'Mug', 'Dish'
+num_objects: 4
+use_convex_decomp: True
+
+# realworld setting
+ip: set_your_ip
+port: set_your_port
+background_sam: True
+
+# robot control setting
+approach_distance: 0.15
+angle_bound: 0.4
+contain_camera: True
+locked_joint_7: -0.25 # the value divided by pi
+# locked_joint_7: 0.25
+ik_max_iter: 1000
+ik_step_size1: 0.01
+ik_step_size2: 0.001
+
+# camera setting
+num_cameras: 36
+reduce_ratio: 2
+
+# t2sqnet config
+text_prompt: tableware
+sequential: True
+conf_thld: 0.75
+t2sqnet_config:
+  model_name: tsqnet
+  bbox_model_path: pretrained/bbox/model_best.pkl
+  bbox_config_path: pretrained/bbox/detr3d.yml
+  param_model_paths: [
+      pretrained/voxel/WineGlass/model_best_chamfer_metric.pkl,
+      pretrained/voxel/Bowl/model_best_chamfer_metric.pkl,
+      pretrained/voxel/Bottle/model_best_chamfer_metric.pkl,
+      pretrained/voxel/BeerBottle/model_best_chamfer_metric.pkl,
+      pretrained/voxel/HandlessCup/model_best_chamfer_metric.pkl,
+      pretrained/voxel/Mug/model_best_chamfer_metric.pkl,
+      pretrained/voxel/Dish/model_best_chamfer_metric.pkl
+  ]
+  param_config_paths: [
+      pretrained/voxel/WineGlass/voxel_WineGlass.yml,
+      pretrained/voxel/Bowl/voxel_Bowl.yml,
+      pretrained/voxel/Bottle/voxel_Bottle.yml,
+      pretrained/voxel/BeerBottle/voxel_BeerBottle.yml,
+      pretrained/voxel/HandlessCup/voxel_HandlessCup.yml,
+      pretrained/voxel/Mug/voxel_Mug.yml,
+      pretrained/voxel/Dish/voxel_Dish.yml
+  ]
+  dummy_data_paths: [
+    pretrained/dummy/1,
+    pretrained/dummy/2,
+    pretrained/dummy/3,
+    pretrained/dummy/4
+  ]
+  voxel_data_config_path: configs/voxelize_config.yml
+  num_augs: 5

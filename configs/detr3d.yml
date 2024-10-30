@@ -1,0 +1,185 @@
+wandb_project_name: TSQ_bbox
+data:
+  training:
+    dataset: detr3d
+    roots: [datasets/full_type_table/full_type_table_1, datasets/full_type_table/full_type_table_2, datasets/full_type_table/full_type_table_3, datasets/full_type_table/full_type_table_4]
+    split: training
+    list_item: [gt_pose, gt_param]
+    max_data_num: 99999999
+    max_obj_num: 4
+    select_view: [15, 16, 17, 18, 19, 20, 21]
+    reduce_ratio: 1
+    preload: False
+    channel3: True
+    cutout:
+      min_num_hole: 0
+      max_num_hole: 2
+      min_cutout_len: 50
+      max_cutout_len: 100
+    batch_size: 8
+    shuffle: True
+    num_workers: 0
+  validation:
+    dataset: detr3d
+    roots: [datasets/full_type_table/full_type_table_1, datasets/full_type_table/full_type_table_2, datasets/full_type_table/full_type_table_3, datasets/full_type_table/full_type_table_4]
+    split: validation
+    list_item: [gt_pose, gt_param]
+    max_data_num: 999999999
+    max_obj_num: 4
+    select_view: [15, 16, 17, 18, 19, 20, 21]
+    reduce_ratio: 1
+    preload: False
+    channel3: True
+    batch_size: 8
+    shuffle: True
+    num_workers: 0
+model:
+  arch: detr3d
+  num_query: 7000
+  num_layers: 6
+  embed_dims: 256
+  resnet_fpn_backbone_args:
+    backbone_name: resnet18
+    pretrained: False
+    use_bn: False
+    trainable_layers: 5
+    returned_layers: [1, 2, 3, 4]
+  transformer_layer_args:
+    d_model: 256
+    nhead: 8
+    dim_feedforward: 512
+    embed_dims: 256
+    num_views: 7
+    num_levels: 4
+    workspace: [[-0.3, 0.3], [-0.4, 0.4], [0.0, 0.3]]
+    use_attn_weights: True
+  ref_pts_predictor:
+    arch: fc_vec
+    in_chan: 256
+    out_chan: 3
+    l_hidden: [256, 256]
+    activation: [leakyrelu, leakyrelu]
+    out_activation: sigmoid
+  bounding_box_predictor:
+    arch: fc_vec
+    in_chan: 256
+    out_chan: 6
+    l_hidden: [256, 256]
+    activation: [leakyrelu, leakyrelu]
+    out_activation: linear
+  confidence_predictor:
+    arch: fc_vec
+    in_chan: 256
+    out_chan: 1
+    l_hidden: [256, 256]
+    activation: [leakyrelu, leakyrelu]
+    out_activation: sigmoid
+  class_name_list: [WineGlass, Bowl, Bottle, BeerBottle, HandlessCup, Mug, Dish]
+  loss_weights: [5.0, 0.75, 0.25] # bbox, matched_conf, zero_conf
+trainer:
+  type: base
+  n_epoch: 20
+  optimizer:
+    name: adam
+    lr: 0.00005
+  detect_nan: False
+  scheduler:
+    type: cosineannealinglr
+    T_max: 20
+logger:
+  training:
+    type: bboxlogger
+    prefix: train
+    items:
+      loss:
+        type: scalar
+        interval: 1
+      last_layer_loss:
+        type: scalar
+        interval: 1
+      bbox_loss:
+        type: scalar
+        interval: 1
+      conf_loss:
+        type: scalar
+        interval: 1
+      zero_conf_loss:
+        type: scalar
+        interval: 1
+      mask_imgs:
+        type: grid_images
+        interval: 5000
+      gt_bbox:
+        type: bbox
+        interval: 5000
+        thld: 0.8
+        with_pc: gt_pc
+      pred_bbox:
+        type: bbox
+        interval: 5000
+        thld: 0.8
+        with_pc: gt_pc
+      gt_pc:
+        type: param_to_pc
+        interval: 999999999
+        color: [255, 255, 255]
+      ref_pos_3d:
+        type: ref_pos_3d
+        interval: 5000
+        color: [255, 0, 0]
+        with_pc: gt_pc
+      ref_pos_2d:
+        type: ref_pos_2d
+        interval: 5000
+        with_pc: gt_pc
+  validation:
+    type: bboxlogger
+    prefix: valid
+    best_model_metric: mAP
+    items:
+      loss:
+        type: average_meter
+        interval: 1
+      last_layer_loss:
+        type: average_meter
+        interval: 1
+      bbox_loss:
+        type: average_meter
+        interval: 1
+      conf_loss:
+        type: average_meter
+        interval: 1
+      zero_conf_loss:
+        type: average_meter
+        interval: 1
+      mask_imgs:
+        type: grid_images
+        interval: 9999999999
+      gt_bbox:
+        type: bbox
+        interval: 9999999999
+        thld: 0.8
+        with_pc: gt_pc
+      pred_bbox:
+        type: bbox
+        interval: 9999999999
+        thld: 0.75
+        with_pc: gt_pc
+      gt_pc:
+        type: param_to_pc
+        interval: 9999999999
+        color: [255, 255, 255]
+      mAP:
+        type: mAP
+        interval: 9999999999
+        iou_thld: [0.5, 0.75, 0.95]
+      ref_pos_3d:
+        type: ref_pos_3d
+        interval: 9999999999
+        color: [255, 0, 0]
+        with_pc: gt_pc
+      ref_pos_2d:
+        type: ref_pos_2d
+        interval: 9999999999
+        with_pc: gt_pc
+      
