@@ -181,7 +181,7 @@ python train.py --config configs/voxel_head/voxel_{X}.yml --entity {Y}
 - ``Y`` represents the WandB username, as our training code currently utilizes WandB.
 
 ### Pre-trained Models
-Pre-trained models should be stored in the ``pretrained/`` directory. The models are provided via this [Google drive link](). After setup, the ``pretrained/`` directory should be organized as follows:
+Pre-trained models should be stored in the ``pretrained/`` directory. The models are provided via this [Google drive link](https://drive.google.com/file/d/17W1HUZmyv1q4k5rXpDyYhgAOH9NbY7qe/view?usp=sharing). After setup, the ``pretrained/`` directory should be organized as follows:
 ```
 pretrained
 ├── bbox
