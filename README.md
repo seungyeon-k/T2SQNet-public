@@ -6,7 +6,7 @@
 
 Young Hun Kim*, 
 [Seungyeon Kim*](https://seungyeon-k.github.io/)<sup>1</sup>, 
-[Yonghyeon Lee](https://www.gabe-yhlee.com/)<sup>1</sup>, and 
+[Yonghyeon Lee](https://www.gabe-yhlee.com/)<sup>2</sup>, and 
 [Frank C. Park](https://sites.google.com/robotics.snu.ac.kr/fcp/)<sup>1</sup>
 <br>
 <sup>1</sup>Seoul National University, <sup>2</sup>Korea Institute For Advanced Study, 
