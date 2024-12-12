@@ -164,7 +164,7 @@ Based on the shell script, each step creates a folder, and each dictionary-style
 > **Warning:** Some data generation steps do not work in server (i.e., without a connected display). If you want generate a dataset in server, try [Open3D headless rendering](http://www.open3d.org/docs/latest/tutorial/Advanced/headless_rendering.html).
 
 ### TablewareNet Dataset
-Generated TablewareNet dataset can be downloaded through the [Google drive link](https://drive.google.com/drive/folders/1d9K7xZU8Z4RnEMgOCBAw3ilTztowcJm7?usp=drive_link). 
+For each scene in TablewareNet, we provide mask images, depth images, and RGB images captured from seven different camera poses using the synthetic camera parameters of the RealSense D435. Additionally, each scene includes 3D geometric information such as object poses, tableware parameters, class labels, bounding boxes, meshes, and TSDF values. Currently, the dataset features only one version: one with transparent objects on a table (a version with objects on a shelf can be generated using the provided data generation scripts). Click the [Google drive link](https://drive.google.com/drive/folders/1d9K7xZU8Z4RnEMgOCBAw3ilTztowcJm7?usp=drive_link) to download and use TablewareNet!
 
 ### Generate Dataset Using TRansPose Objects
 If you want to generate data with objects from the TRansPose dataset, first request the TRansPose object files from [this link](https://sites.google.com/view/transpose-dataset), place the ``.obj`` files in the ``assets/TRansPose`` folder, and then run the following shell script.
