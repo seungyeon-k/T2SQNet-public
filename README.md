@@ -63,6 +63,19 @@ mv /path/to/blender-4.0.2-linux-x64/4.0/python /path/to/blender-4.0.2-linux-x64/
 ```shell
 ln -s /path/to/anaconda3/envs/t2sqnet /path/to/blender-4.0.2-linux-x64/4.0/python
 ```
+5. Download the additional material files from [Google drive link](https://drive.google.com/drive/folders/10i0fxI2DMamB35Bglo9stWRBjh9a7cUS?usp=sharing) and place them in the ``assets/materials/`` directory. After setup, the ``assets/materials/`` directory should be organized as follows:
+```
+assets
+└── materials
+    ├── envmap_lib_test
+    ├── pattern
+    ├── realfloor_test
+    ├── realtable_test
+    ├── table_obj
+    ├── texture
+    └── material_lib_graspnet-v2.blend
+```
+
 > **Warining:** Blender 4.0 is only compatible with Python 3.10.
 
 ## Dataset
@@ -151,7 +164,7 @@ Based on the shell script, each step creates a folder, and each dictionary-style
 > **Warning:** Some data generation steps do not work in server (i.e., without a connected display). If you want generate a dataset in server, try [Open3D headless rendering](http://www.open3d.org/docs/latest/tutorial/Advanced/headless_rendering.html).
 
 ### TablewareNet Dataset
-Coming soon
+Generated TablewareNet dataset can be downloaded through the [Google drive link](https://drive.google.com/drive/folders/1d9K7xZU8Z4RnEMgOCBAw3ilTztowcJm7?usp=drive_link). 
 
 ### Generate Dataset Using TRansPose Objects
 If you want to generate data with objects from the TRansPose dataset, first request the TRansPose object files from [this link](https://sites.google.com/view/transpose-dataset), place the ``.obj`` files in the ``assets/TRansPose`` folder, and then run the following shell script.
@@ -181,7 +194,7 @@ python train.py --config configs/voxel_head/voxel_{X}.yml --entity {Y}
 - ``Y`` represents the WandB username, as our training code currently utilizes WandB.
 
 ### Pre-trained Models
-Pre-trained models should be stored in the ``pretrained/`` directory. The models are provided via this [Google drive link](https://drive.google.com/file/d/17W1HUZmyv1q4k5rXpDyYhgAOH9NbY7qe/view?usp=sharing). After setup, the ``pretrained/`` directory should be organized as follows:
+Pre-trained models should be stored in the ``pretrained/`` directory. The models are provided via this [Google drive link](https://drive.google.com/drive/folders/18gaogv8NOEbxskADN7dGahi6N_MXcEuS?usp=sharing). After setup, the ``pretrained/`` directory should be organized as follows:
 ```
 pretrained
 ├── bbox
@@ -202,6 +215,13 @@ pretrained
 ```
 
 > **Warning:** We found that when training with data and model parameters set to ``torch.float32`` in the ResNet-based feature pyramid network used in DETR3D, the network produced varying (and sometimes broken) outputs for the same input during inference if the batch size differed from that used during training. To address this, we added dummy data during inference to match the batch size used in training. We also confirmed that this phenomenon does not occur when using ``torch.float64``.
+
+### Recognition Using T<sup>2</sup>SQNet
+The inference code for the pretrained T<sup>2</sup>SQNet using an example dataset (i.e., RGB images) is as follows:
+```shell
+python recognition.py --config configs/recognition.yml --sim_type {X}
+```
+- ``X`` can be either ``table`` or ``shelf``. 
 
 ## Manipulation
 The manipulation script with T<sup>2</sup>SQNet is provided as follows:

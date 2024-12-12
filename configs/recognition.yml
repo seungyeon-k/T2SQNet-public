@@ -1,0 +1,37 @@
+# camera setting
+num_cameras: 36
+reduce_ratio: 2
+
+# t2sqnet config
+text_prompt: tableware
+conf_thld: 0.75
+t2sqnet_config:
+  model_name: tsqnet
+  bbox_model_path: pretrained/bbox/model_best.pkl
+  bbox_config_path: pretrained/bbox/detr3d.yml
+  param_model_paths: [
+      pretrained/voxel/WineGlass/model_best_chamfer_metric.pkl,
+      pretrained/voxel/Bowl/model_best_chamfer_metric.pkl,
+      pretrained/voxel/Bottle/model_best_chamfer_metric.pkl,
+      pretrained/voxel/BeerBottle/model_best_chamfer_metric.pkl,
+      pretrained/voxel/HandlessCup/model_best_chamfer_metric.pkl,
+      pretrained/voxel/Mug/model_best_chamfer_metric.pkl,
+      pretrained/voxel/Dish/model_best_chamfer_metric.pkl
+  ]
+  param_config_paths: [
+      pretrained/voxel/WineGlass/voxel_WineGlass.yml,
+      pretrained/voxel/Bowl/voxel_Bowl.yml,
+      pretrained/voxel/Bottle/voxel_Bottle.yml,
+      pretrained/voxel/BeerBottle/voxel_BeerBottle.yml,
+      pretrained/voxel/HandlessCup/voxel_HandlessCup.yml,
+      pretrained/voxel/Mug/voxel_Mug.yml,
+      pretrained/voxel/Dish/voxel_Dish.yml
+  ]
+  dummy_data_paths: [
+    pretrained/dummy/1,
+    pretrained/dummy/2,
+    pretrained/dummy/3,
+    pretrained/dummy/4
+  ]
+  voxel_data_config_path: configs/voxelize_config.yml
+  num_augs: 5
